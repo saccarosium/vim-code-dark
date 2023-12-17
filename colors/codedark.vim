@@ -30,14 +30,6 @@ fun! <sid>hi(group, fg, bg, attr, sp)
     exec "hi " . a:group . " guisp=" . a:sp.gui
   endif
 endfun
-" Choose old or new name for Treesitter groups depending on Neovim version
-fun! <sid>hiTS(g_new, g_old, fg, bg, attr, sp)
-    call <sid>hi(has("nvim-0.8.0") ? a:g_new : a:g_old, a:fg, a:bg, a:attr, a:sp)
-endfun
-
-fun! <sid>hiTSlink(g_new, g_old, link)
-    exec "hi! link " . (has("nvim-0.8.0") ? a:g_new : a:g_old) . " " . a:link
-endfun
 
 " ------------------
 " Color definitions:
@@ -78,26 +70,17 @@ if !exists("g:codedark_transparent")
     let g:codedark_transparent=0
 endif
 
-if !exists("g:codedark_modern")
-    let g:codedark_modern=0
-endif
-
 let s:cdNone = {'gui': 'NONE', 'cterm': 'NONE', 'cterm256': 'NONE'}
 let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
 let s:cdBack = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm256': '234'}
-if g:codedark_modern | let s:cdBack = {'gui': '#1f1f1f', 'cterm': 'NONE', 'cterm256': '234'} | endif
 if g:codedark_transparent | let s:cdBack = {'gui': 'NONE', 'cterm': 'NONE', 'cterm256': 'NONE'} | endif
 
 let s:cdTabCurrent = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm256': '234'}
-if g:codedark_modern | let s:cdTabCurrent = {'gui': '#1f1f1f', 'cterm': s:cterm00, 'cterm256': '234'} | endif
 let s:cdTabOther = {'gui': '#2D2D2D', 'cterm': s:cterm01, 'cterm256': '236'}
-if g:codedark_modern | let s:cdTabOther = {'gui': '#181818', 'cterm': s:cterm01, 'cterm256': '236'} | endif
 let s:cdTabOutside = {'gui': '#252526', 'cterm': s:cterm01, 'cterm256': '235'}
-if g:codedark_modern | let s:cdTabOutside = {'gui': '#181818', 'cterm': s:cterm01, 'cterm256': '236'} | endif
 
 let s:cdLeftDark = {'gui': '#252526', 'cterm': s:cterm01, 'cterm256': '235'}
 let s:cdLeftMid = {'gui': '#373737', 'cterm': s:cterm03, 'cterm256': '237'}
-if g:codedark_modern | let s:cdLeftMid = {'gui': '#181818', 'cterm': 'NONE', 'cterm256': '237'} | endif
 let s:cdLeftLight = {'gui': '#3F3F46', 'cterm': s:cterm03, 'cterm256': '238'}
 
 let s:cdPopupFront = {'gui': '#BBBBBB', 'cterm': s:cterm06, 'cterm256': '250'}
@@ -116,17 +99,14 @@ let s:cdSelection = {'gui': '#264F78', 'cterm': s:cterm03, 'cterm256': '24'}
 let s:cdLineNumber = {'gui': '#5A5A5A', 'cterm': s:cterm04, 'cterm256': '240'}
 
 let s:cdDiffRedDark = {'gui': '#4B1818', 'cterm': s:cterm08, 'cterm256': '52'}
-if g:codedark_modern | let s:cdDiffRedDark = {'gui': '#da3633', 'cterm': 'NONE', 'cterm256': '52'} | endif
 let s:cdDiffRedLight = {'gui': '#6F1313', 'cterm': s:cterm08, 'cterm256': '52'}
 let s:cdDiffRedLightLight = {'gui': '#FB0101', 'cterm': s:cterm08, 'cterm256': '09'}
 let s:cdDiffGreenDark = {'gui': '#373D29', 'cterm': s:cterm0B, 'cterm256': '237'}
-if g:codedark_modern | let s:cdDiffGreenDark = {'gui': '#238636', 'cterm': 'NONE', 'cterm256': '237'} | endif
 let s:cdDiffGreenLight = {'gui': '#4B5632', 'cterm': s:cterm09, 'cterm256': '58'}
 let s:cdDiffBlueLight = {'gui': '#87d7ff', 'cterm': s:cterm0C, 'cterm256': '117'}
 let s:cdDiffBlue = {'gui': '#005f87', 'cterm': s:cterm0D, 'cterm256': '24'}
 
 let s:cdSearchCurrent = {'gui': '#4B5632', 'cterm': s:cterm09, 'cterm256': '58'}
-if g:codedark_modern | let s:cdSearchCurrent = {'gui': '#9e6a03', 'cterm': s:cterm09, 'cterm256': '58'} | endif
 let s:cdSearch = {'gui': '#773800', 'cterm': s:cterm03, 'cterm256': '94'}
 
 " Syntax colors:
@@ -150,7 +130,6 @@ let s:cdGreen = {'gui': '#6A9955', 'cterm': s:cterm0B, 'cterm256': '65'}
 let s:cdBlueGreen = {'gui': '#4EC9B0', 'cterm': s:cterm0F, 'cterm256': '43'}
 let s:cdLightGreen = {'gui': '#B5CEA8', 'cterm': s:cterm09, 'cterm256': '151'}
 let s:cdRed = {'gui': '#F44747', 'cterm': s:cterm08, 'cterm256': '203'}
-if g:codedark_modern | let s:cdRed = {'gui': '#f85149', 'cterm': s:cterm08, 'cterm256': '203'} | endif
 let s:cdOrange = {'gui': '#CE9178', 'cterm': s:cterm0F, 'cterm256': '173'}
 let s:cdLightRed = {'gui': '#D16969', 'cterm': s:cterm08, 'cterm256': '167'}
 if g:codedark_conservative | let s:cdLightRed = s:cdOrange | endif
@@ -224,7 +203,7 @@ call <sid>hi('Function', s:cdYellow, {}, 'none', {})
 call <sid>hi('Statement', s:cdPink, {}, 'none', {})
 call <sid>hi('Conditional', s:cdPink, {}, 'none', {})
 call <sid>hi('Repeat', s:cdPink, {}, 'none', {})
-call <sid>hi('Label', s:cdPink, {}, 'none', {})
+call <sid>hi('Label', s:cdComment, {}, 'none', {})
 call <sid>hi('Operator', s:cdFront, {}, 'none', {})
 call <sid>hi('Keyword', s:cdPink, {}, 'none', {})
 call <sid>hi('Exception', s:cdPink, {}, 'none', {})
@@ -247,85 +226,11 @@ call <sid>hi('Underlined', s:cdNone, {}, 'underline', {})
 call <sid>hi("Conceal", s:cdFront, s:cdBack, 'none', {})
 call <sid>hi('Ignore', s:cdBack, {}, 'none', {})
 call <sid>hi('Error', s:cdRed, s:cdBack, 'undercurl', s:cdRed)
-call <sid>hi('Todo', s:cdNone, s:cdLeftMid, 'none', {})
+hi! link Todo Comment
 call <sid>hi('SpellBad', s:cdRed, s:cdBack, 'undercurl', s:cdRed)
 call <sid>hi('SpellCap', s:cdRed, s:cdBack, 'undercurl', s:cdRed)
 call <sid>hi('SpellRare', s:cdRed, s:cdBack, 'undercurl', s:cdRed)
 call <sid>hi('SpellLocal', s:cdRed, s:cdBack, 'undercurl', s:cdRed)
-
-" NEOVIM
-" Make neovim specific groups load only on Neovim
-if has("nvim")
-    " nvim-treesitter/nvim-treesitter (github)
-    call <sid>hiTSlink('@error', 'TSError', 'ErrorMsg')
-    call <sid>hiTSlink('@punctuation.delimiter', 'TSPunctDelimiter', 'Delimiter')
-    call <sid>hiTSlink('@punctuation.bracket', 'TSPunctBracket', 'Delimiter')
-    call <sid>hiTSlink('@punctuation.special', 'TSPunctSpecial', 'Delimiter')
-    " Constant
-    call <sid>hiTS('@constant', 'TSConstant', s:cdYellow, {}, 'none', {})
-    call <sid>hiTSlink('@constant.builtin', 'TSConstBuiltin', 'Constant')
-    call <sid>hiTS('@constant.macro', 'TSConstMacro', s:cdBlueGreen, {}, 'none', {})
-    call <sid>hiTSlink('@string', 'TSString', 'String')
-    call <sid>hiTSlink('@string.regex', 'TSStringRegex', 'String')
-    call <sid>hiTS('@string.escape', 'TSStringEscape', s:cdYellowOrange, {}, 'none', {})
-    call <sid>hiTSlink('@character', 'TSCharacter', 'Character')
-    call <sid>hiTSlink('@number', 'TSNumber', 'Number')
-    call <sid>hiTS('@boolean', 'TSBoolean', s:cdBlue, {}, 'none', {})
-    call <sid>hiTSlink('@float', 'TSFloat', 'Float')
-    call <sid>hiTS('@annotation', 'TSAnnotation', s:cdYellow, {}, 'none', {})
-    call <sid>hiTS('@attribute', 'TSAttribute', s:cdBlueGreen, {}, 'none', {})
-    call <sid>hiTS('@namespace', 'TSNamespace', s:cdBlueGreen, {}, 'none', {})
-    " Functions
-    call <sid>hiTSlink('@function.builtin', 'TSFuncBuiltin', 'Function')
-    call <sid>hiTSlink('@function', 'TSFunction','Function')
-    call <sid>hiTSlink('@function.macro', 'TSFuncMacro','Function')
-    call <sid>hiTS('@parameter', 'TSParameter', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTS('@parameter.reference', 'TSParameterReference', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTS('@method', 'TSMethod', s:cdYellow, {}, 'none', {})
-    call <sid>hiTS('@field', 'TSField', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTS('@property', 'TSProperty', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTS('@constructor', 'TSConstructor', s:cdBlueGreen, {}, 'none', {})
-    " Keywords
-    call <sid>hiTSlink('@conditional', 'TSConditional', 'Conditional')
-    call <sid>hiTSlink('@repeat', 'TSRepeat', 'Repeat')
-    call <sid>hiTS('@label', 'TSLabel', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTS('@keyword', 'TSKeyword', s:cdBlue, {}, 'none', {})
-    call <sid>hiTS('@keyword.function', 'TSKeywordFunction', s:cdBlue, {}, 'none', {})
-    call <sid>hiTS('@keyword.operator', 'TSKeywordOperator', s:cdBlue, {}, 'none', {})
-    call <sid>hiTS('@operator', 'TSOperator', s:cdFront, {}, 'none', {})
-    call <sid>hiTS('@exception', 'TSException', s:cdPink, {}, 'none', {})
-    call <sid>hiTS('@type', 'TSType', s:cdBlueGreen, {}, 'none', {})
-    call <sid>hiTSlink('@type.builtin', 'TSTypeBuiltin', 'Type')
-    call <sid>hi('TSStructure', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTSlink('@include', 'TSInclude', 'Include')
-    " Variable
-    call <sid>hiTS('@variable', 'TSVariable', s:cdLightBlue, {}, 'none', {})
-    call <sid>hiTS('@variable.builtin', 'TSVariableBuiltin', s:cdLightBlue, {}, 'none', {})
-    " Text
-    call <sid>hiTS('@text', 'TSText', s:cdFront, s:cdNone, 'bold', {})
-    call <sid>hiTS('@text.strong', 'TSStrong', s:cdFront, s:cdNone, 'bold', {})
-    call <sid>hiTS('@text.emphasis', 'TSEmphasis', s:cdYellowOrange, s:cdNone, 'italic', {})
-    call <sid>hiTSlink('@text.underline', 'TSUnderline', 'Underlined')
-    call <sid>hiTS('@text.title', 'TSTitle', s:cdBlue, {}, 'bold', {})
-    call <sid>hiTS('@text.literal', 'TSLiteral', s:cdOrange, {}, 'none', {})
-    call <sid>hiTS('@text.uri', 'TSURI', s:cdOrange, {}, 'none', {})
-    " Tags
-    call <sid>hiTS('@tag', 'TSTag', s:cdBlue, {}, 'none', {})
-    call <sid>hiTS('@tag.delimiter', 'TSTagDelimiter', s:cdGray, {}, 'none', {})
-
-    " hrsh7th/nvim-cmp (github)
-    call <sid>hi('CmpItemAbbrDeprecated', s:cdGray, {}, 'none', {})
-    call <sid>hi('CmpItemAbbrMatch', s:cdBlue, {}, 'none', {})
-    hi! link CmpItemAbbrMatchFuzzy CmpItemAbbrMatch
-    call <sid>hi('CmpItemKindVariable', s:cdLightBlue, {}, 'none', {})
-    call <sid>hi('CmpItemKindInterface', s:cdLightBlue, {}, 'none', {})
-    call <sid>hi('CmpItemKindText', s:cdLightBlue, {}, 'none', {})
-    call <sid>hi('CmpItemKindFunction', s:cdPink, {}, 'none', {})
-    call <sid>hi('CmpItemKindMethod ', s:cdPink, {}, 'none', {})
-    call <sid>hi('CmpItemKindKeyword', s:cdFront, {}, 'none', {})
-    call <sid>hi('CmpItemKindProperty', s:cdFront, {}, 'none', {})
-    call <sid>hi('CmpItemKindUnit', s:cdFront, {}, 'none', {})
-endif
 
 " MARKDOWN (built-in)
 call <sid>hi('markdownH1', s:cdBlue, {}, 'bold', {})
@@ -619,38 +524,3 @@ call <sid>hi('CTagsGlobalVariable', s:cdBlueGreen, {}, 'none', {})
 call <sid>hi('CTagsDefinedName ', s:cdBlue, {}, 'none', {})
 highlight def link CTagsFunction Function
 highlight def link CTagsMember Identifier
-
-" C++ color_coded
-call <sid>hi('StructDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('UnionDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('ClassDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TypeRef', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TypedefDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TypeAliasDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('EnumDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TemplateTypeParameter', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TypeAliasTemplateDecl', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('ClassTemplate', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('ClassTemplatePartialSpecialization', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('FunctionTemplate', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TemplateRef', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('TemplateTemplateParameter', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('UsingDeclaration', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('MemberRef', s:cdLightBlue, {}, 'italic', {})
-call <sid>hi('MemberRefExpr', s:cdYellow, {}, 'italic', {})
-call <sid>hi('Namespace', s:cdSilver, {}, 'none', {})
-call <sid>hi('NamespaceRef', s:cdSilver, {}, 'none', {})
-call <sid>hi('NamespaceAlias', s:cdSilver, {}, 'none', {})
-
-" C++ lsp-cxx-highlight
-call <sid>hi('LspCxxHlSymClass', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('LspCxxHlSymStruct', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('LspCxxHlSymEnum', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('LspCxxHlSymTypeAlias', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('LspCxxHlSymTypeParameter', s:cdBlueGreen, {}, 'none', {})
-call <sid>hi('LspCxxHlSymConcept', s:cdBlueGreen, {}, 'italic', {})
-call <sid>hi('LspCxxHlSymNamespace', s:cdSilver, {}, 'none', {})
-
-" Coc Explorer:
-call <sid>hi('CocHighlightText', {}, s:cdSelection, 'none', {})
-call <sid>hi('CocExplorerIndentLine', s:cdCursorDark, {}, 'none', {})
